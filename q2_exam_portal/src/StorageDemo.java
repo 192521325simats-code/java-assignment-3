@@ -1,0 +1,51 @@
+package q2_exam_portal;
+
+import java.io.IOException;
+
+/**
+ * Exact assignment verification class for Q2 TODO 1.
+ * Matches the class names, methods, and expected output from the prompt.
+ */
+public class StorageDemo {
+
+    static class ExamException extends Exception {
+        ExamException(String message) {
+            super(message);
+        }
+
+        ExamException(String message, Throwable cause) {
+            super(message, cause);
+        }
+    }
+
+    static class SubmissionStorageException extends ExamException {
+        SubmissionStorageException(String message, Throwable cause) {
+            super(message, cause);
+        }
+    }
+
+    static class Storage {
+        void save(String fileName, long sizeKb) throws SubmissionStorageException {
+            try {
+                if (sizeKb > 500) {
+                    throw new IOException("Disk quota exceeded");
+                }
+                System.out.println("Saved " + fileName);
+            } catch (IOException e) {
+                // TODO 1: Wrap the IOException in a SubmissionStorageException, keeping the IOException as its cause
+                throw new SubmissionStorageException("Could not store " + fileName, e);
+            }
+        }
+    }
+
+    public static void main(String[] args) {
+        Storage storage = new Storage();
+        try {
+            storage.save("answer01.pdf", 120);
+            storage.save("answer02.pdf", 800);
+        } catch (ExamException e) {
+            System.out.println("Error: " + e.getMessage());
+            System.out.println("Cause: " + e.getCause().getMessage());
+        }
+    }
+}
